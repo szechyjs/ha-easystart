@@ -1,0 +1,60 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "bluetooth_confirm": {
+        "description": "Do you want to set up {name}?"
+      },
+      "user": {
+        "data": {
+          "address": "Device"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Device is already configured",
+      "no_devices_found": "No EasyStart devices found nearby. Make sure the device is powered on and within Bluetooth range."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "live_current": {
+        "name": "Live Current"
+      },
+      "live_power": {
+        "name": "Live Power"
+      },
+      "line_frequency": {
+        "name": "Line Frequency"
+      },
+      "last_start_peak": {
+        "name": "Last Start Peak"
+      },
+      "scpt_delay": {
+        "name": "SCPT Delay"
+      },
+      "total_faults": {
+        "name": "Total Faults"
+      },
+      "total_starts": {
+        "name": "Total Starts"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "normal": "Normal",
+          "unexpected_curr_flt": "Unexpected Current Fault",
+          "short_cycle_delay": "Short Cycle Delay",
+          "pwr_intrrptn_fault": "Power Interruption Fault",
+          "stall_fault": "Stall Fault",
+          "stuck_sr_fault": "Stuck SR Fault",
+          "open_ovrld_fault": "Open Overload Fault",
+          "overcurrent_fault": "Overcurrent Fault",
+          "bad_wiring_fault": "Bad Wiring Fault",
+          "wrong_voltage_flt": "Wrong Voltage Fault",
+          "unknown": "Unknown"
+        }
+      }
+    }
+  }
+}
