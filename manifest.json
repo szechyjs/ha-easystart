@@ -1,0 +1,15 @@
+{
+  "domain": "easystart",
+  "name": "EasyStart",
+  "bluetooth": [
+    {
+      "manufacturer_id": 0,
+      "service_uuid": "d973f2e0-b19e-11e2-9e96-0800200c9a66"
+    }
+  ],
+  "codeowners": ["@szechyjs"],
+  "config_flow": true,
+  "dependencies": ["bluetooth_adapters"],
+  "integration_type": "device",
+  "iot_class": "local_polling"
+}
