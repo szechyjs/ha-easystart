@@ -42,7 +42,9 @@ MIN_PACKET_LENGTH = 18
 # Timeout (seconds) waiting for a BLE notification after sending the read command
 NOTIFY_TIMEOUT = 5.0
 
-# Status strings indexed by byte[2] of the notify packet
+# Key used to store the auto-created Riemann sum helper entry ID in config entry data
+CONF_ENERGY_ENTRY_ID = "energy_entry_id"
+
 STATUS_STRINGS = [
     "Normal",
     "Unexpected Curr Flt",

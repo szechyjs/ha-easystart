@@ -60,23 +60,18 @@ The integration exposes the following sensors:
 
 ### Energy Dashboard
 
-The **Live Power** sensor (W) tracks instantaneous power draw. To use it with Home Assistant's Energy dashboard you first need to create a **Riemann sum** helper to convert power (W) into energy (kWh):
+The integration automatically creates an **Energy** sensor (kWh) using a Riemann sum of the Live Power sensor. No manual helper setup required.
 
-1. Go to **Settings → Devices & Services → Helpers → Create Helper**
-2. Choose **Integral sensor (Riemann sum)**
-3. Configure it:
-   - **Name**: `EasyStart Energy`
-   - **Input sensor**: `sensor.easystart_live_power` (or whatever your entity ID is)
-   - **Integration method**: Left Riemann sum
-   - **Unit time**: Hours
-   - **Precision**: 2
-4. Save — this creates a new `sensor.easystart_energy` entity in kWh
+To add it to the Energy dashboard:
 
-Then add it to the Energy dashboard:
+1. Go to **Settings → Dashboards → Energy**
+2. Under **Individual devices**, click **Add device**
+3. Under **Device energy consumption**, select **Energy** (Air Conditioner)
+4. Optionally, under **Device power consumption**, select **Live Power** to show real-time wattage alongside cumulative usage
+5. Optionally set a display name and upstream device
+6. Click **Save**
 
-5. Go to **Settings → Dashboards → Energy**
-6. Under **Individual devices**, click **Add device**
-7. Select the **EasyStart Energy** sensor you just created
+> **Note:** A "Statistics not defined" warning may appear for up to 5 minutes after the sensor is first created. This is normal — it clears automatically once HA's statistics engine indexes the new entity.
 
 ## How It Works
 
