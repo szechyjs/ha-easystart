@@ -60,11 +60,23 @@ The integration exposes the following sensors:
 
 ### Energy Dashboard
 
-**Live Power** is exposed as a `SensorDeviceClass.POWER` sensor, making it compatible with Home Assistant's Energy dashboard. To track energy consumption:
+The **Live Power** sensor (W) tracks instantaneous power draw. To use it with Home Assistant's Energy dashboard you first need to create a **Riemann sum** helper to convert power (W) into energy (kWh):
 
-1. Go to **Settings → Dashboards → Energy**
-2. Under **Individual devices**, add the **EasyStart Live Power** sensor
-3. HA will calculate kWh automatically using a Riemann sum
+1. Go to **Settings → Devices & Services → Helpers → Create Helper**
+2. Choose **Integral sensor (Riemann sum)**
+3. Configure it:
+   - **Name**: `EasyStart Energy`
+   - **Input sensor**: `sensor.easystart_live_power` (or whatever your entity ID is)
+   - **Integration method**: Left Riemann sum
+   - **Unit time**: Hours
+   - **Precision**: 2
+4. Save — this creates a new `sensor.easystart_energy` entity in kWh
+
+Then add it to the Energy dashboard:
+
+5. Go to **Settings → Dashboards → Energy**
+6. Under **Individual devices**, click **Add device**
+7. Select the **EasyStart Energy** sensor you just created
 
 ## How It Works
 

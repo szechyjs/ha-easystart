@@ -76,9 +76,8 @@ class EasyStartConfigFlow(ConfigFlow, domain=DOMAIN):
         already_configured = self._async_current_ids()
         self._discovered_devices = {
             info.address: _device_title(info)
-            for info in async_discovered_service_info(self.hass)
-            if info.address not in already_configured
-            and SERVICE_UUID in info.service_uuids
+            for info in async_discovered_service_info(self.hass, connectable=True)
+            if info.address not in already_configured and _is_easystart(info)
         }
 
         if not self._discovered_devices:
@@ -88,6 +87,13 @@ class EasyStartConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=_address_schema(self._discovered_devices),
         )
+
+
+def _is_easystart(info: BluetoothServiceInfoBleak) -> bool:
+    """Return True if the advertisement looks like an EasyStart device."""
+    return SERVICE_UUID in info.service_uuids or (
+        info.name is not None and info.name.startswith("EasyStart")
+    )
 
 
 def _device_title(info: BluetoothServiceInfoBleak) -> str:

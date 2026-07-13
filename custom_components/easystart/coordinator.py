@@ -19,7 +19,6 @@ from bleak_retry_connector import (
 from homeassistant.components import bluetooth
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
@@ -91,11 +90,12 @@ def _parse_packet(data: bytearray) -> EasyStartData:
 class EasyStartDataUpdateCoordinator(DataUpdateCoordinator[EasyStartData]):
     """Coordinator that polls an EasyStart device over BLE."""
 
-    ble_device: BLEDevice
+    ble_device: BLEDevice | None
     config_entry: EasyStartConfigEntry
 
     def __init__(self, hass: HomeAssistant, entry: EasyStartConfigEntry) -> None:
         """Initialize the coordinator."""
+        self.ble_device = None
         super().__init__(
             hass,
             _LOGGER,
@@ -106,21 +106,10 @@ class EasyStartDataUpdateCoordinator(DataUpdateCoordinator[EasyStartData]):
 
     @override
     async def _async_setup(self) -> None:
-        """Resolve the BLEDevice and close any stale connections."""
+        """Close any stale connections left from a previous run."""
         address = self.config_entry.unique_id
         assert address is not None
-
         await close_stale_connections_by_address(address)
-
-        ble_device = bluetooth.async_ble_device_from_address(
-            self.hass, address, connectable=True
-        )
-        if not ble_device:
-            raise ConfigEntryNotReady(
-                f"EasyStart device {address} not found. "
-                "Make sure the device is powered on and within Bluetooth range."
-            )
-        self.ble_device = ble_device
 
     @override
     async def _async_update_data(self) -> EasyStartData:
@@ -128,13 +117,16 @@ class EasyStartDataUpdateCoordinator(DataUpdateCoordinator[EasyStartData]):
         address = self.config_entry.unique_id
         assert address is not None
 
-        # Re-resolve the BLEDevice on each poll; the underlying adapter path can
-        # change between updates as Home Assistant rotates through adapters.
+        # Resolve (or re-resolve) the BLEDevice on every poll so we track
+        # adapter changes and pick up the device once it comes back into range.
         ble_device = bluetooth.async_ble_device_from_address(
             self.hass, address, connectable=True
         )
         if ble_device:
             self.ble_device = ble_device
+
+        if self.ble_device is None:
+            raise UpdateFailed(f"EasyStart device {address} is not in Bluetooth range")
 
         notification_event = asyncio.Event()
         received_data: bytearray | None = None

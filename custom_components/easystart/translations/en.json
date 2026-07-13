@@ -31,16 +31,13 @@
         "name": "Last Start Peak Current"
       },
       "scpt_delay": {
-        "name": "SCPT Delay",
-        "entity_description": "Short Cycle Protection Timer — minimum wait time before the compressor is allowed to restart after shutting off. Prevents damage from rapid cycling."
+        "name": "SCPT Delay"
       },
       "total_faults": {
-        "name": "Total Faults",
-        "entity_description": "Lifetime count of fault events recorded by the EasyStart device."
+        "name": "Total Faults"
       },
       "total_starts": {
-        "name": "Total Starts",
-        "entity_description": "Lifetime count of compressor start attempts recorded by the EasyStart device."
+        "name": "Total Starts"
       },
       "status": {
         "name": "Status",
